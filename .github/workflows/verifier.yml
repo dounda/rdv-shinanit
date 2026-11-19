@@ -3,7 +3,7 @@ name: Verifier RDV shinanit
 on:
   schedule:
     # une fois par heure, de 05h à 01h heure d'Israël (UTC+2 en hiver) ; à hh:07 pour éviter l'heure pile
-    - cron: "7 3-23 * * *"
+    - cron: "7,37 3-23 * * *"
   workflow_dispatch: {}   # bouton "Run workflow" pour lancer à la main
 
 permissions:
