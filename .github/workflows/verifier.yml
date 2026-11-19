@@ -1,0 +1,48 @@
+name: Verifier RDV shinanit
+
+on:
+  schedule:
+    # une fois par heure, de 05h à 01h heure d'Israël (UTC+2 en hiver) ; à hh:07 pour éviter l'heure pile
+    - cron: "7 3-23 * * *"
+  workflow_dispatch: {}   # bouton "Run workflow" pour lancer à la main
+
+permissions:
+  contents: write
+
+concurrency:
+  group: verifier
+  cancel-in-progress: false
+
+jobs:
+  verifier:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Installer Playwright
+        run: |
+          pip install playwright
+          python -m playwright install --with-deps chromium
+
+      - name: Verifier les rendez-vous
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python verifier.py
+
+      - name: Sauvegarder l'etat
+        run: |
+          if [ -n "$(git status --porcelain etat.json)" ]; then
+            git config user.name "rdv-bot"
+            git config user.email "rdv-bot@users.noreply.github.com"
+            git add etat.json
+            git commit -m "etat"
+            git pull --rebase || true
+            git push
+          fi
