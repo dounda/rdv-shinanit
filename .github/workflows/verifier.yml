@@ -24,12 +24,20 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Installer Playwright
-        run: |
-          pip install playwright
-          python -m playwright install chromium
-          # dépendances système : facultatif (déjà presque toutes présentes), ne bloque pas si les serveurs Ubuntu sont en panne
-          timeout 120 python -m playwright install-deps chromium || echo "install-deps ignore"
+      - name: Installer Playwright (bibliotheque Python)
+        run: pip install playwright==1.65.2
+
+      # Chromium est gardé en cache d'une exécution à l'autre : pas de re-téléchargement
+      - name: Cache du navigateur Chromium
+        id: cache-chromium
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: chromium-playwright-1.65.2
+
+      - name: Installer Chromium (seulement si absent du cache)
+        if: steps.cache-chromium.outputs.cache-hit != 'true'
+        run: python -m playwright install chromium
 
       - name: Verifier les rendez-vous
         env:
