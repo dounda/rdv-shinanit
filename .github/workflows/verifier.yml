@@ -27,7 +27,9 @@ jobs:
       - name: Installer Playwright
         run: |
           pip install playwright
-          python -m playwright install --with-deps chromium
+          python -m playwright install chromium
+          # dépendances système : facultatif (déjà presque toutes présentes), ne bloque pas si les serveurs Ubuntu sont en panne
+          timeout 120 python -m playwright install-deps chromium || echo "install-deps ignore"
 
       - name: Verifier les rendez-vous
         env:
