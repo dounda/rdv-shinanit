@@ -25,10 +25,10 @@ SHINANIOT = {
     "950000000000010904": "שליו אורטל · Maale Adumim",
     "950000000000010511": "בובלי אוה · Maale Adumim",
     # Mevaseret Tsion - חרמון 2
-    "970000000000011190": "טויפלייבה אולה · Mevaseret",
+    "970000000000011190": "טויפלייבה אולה · Mevaseret", "000881070937000613000000000000": "Dr טויטו סברין (gyné) · Ramot", "000881070202200613000000000000": "Dr טויטו סברין (gyné) · Pat'hia 21", "000881070291800613000000000000": "Dr טויטו סברין (gyné) · Har Levin", "000881070020800613000000000000": "Dr טויטו סברין (gyné) · Dolchin",
 }
-RECHERCHES = ["שיננית רמות", "שיננית מעלה אדומים", "שיננית מבשרת"]
-URL_RECHERCHE = "https://www.meuhedet.co.il/search?mod=110&rn=1065&q="
+RECHERCHES = [(110, "שיננית רמות"), (110, "שיננית מעלה אדומים"), (110, "שיננית מבשרת"), (100, "טויטו")]
+URL_RECHERCHE = "https://www.meuhedet.co.il/search?rn=1065&mod={}&q="
 ETAT = Path(__file__).resolve().parent / "etat.json"
 JOURS = ["lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"]
 
@@ -51,7 +51,7 @@ def telegram(msg):
 def lire_page(page, requete):
     resultats = {}
     with page.expect_response(lambda r: "ExternalIndexerAddedData" in r.url, timeout=60000) as rep:
-        page.goto(URL_RECHERCHE + urllib.parse.quote(requete), timeout=60000)
+        page.goto(URL_RECHERCHE.format(requete[0]) + urllib.parse.quote(requete[1]), timeout=60000)
     for e in rep.value.json().get("Entries", []):
         pid = e.get("Id", "").split("_")[-1]
         q = (e.get("FirstQueues") or {}).get("Clinic")
