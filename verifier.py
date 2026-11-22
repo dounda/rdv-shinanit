@@ -15,19 +15,9 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 SHINANIOT = {
-    # Ramot - Kanyon Ramot, שד' גולדה מאיר 255
-    "760000000000010633": "אלישע רפאלה · Ramot",
-    "760000000000011330": "מושיחוב נטלה · Ramot",
-    "760000000000010515": "צ'ונה אלאדי אפרת · Ramot",
-    "760000000000011333": "חרוב באדר (שינן) · Ramot",
-    # Maale Adumim - כיכר יהלום 5
-    "950000000000011303": "אדר גל · Maale Adumim",
-    "950000000000010904": "שליו אורטל · Maale Adumim",
-    "950000000000010511": "בובלי אוה · Maale Adumim",
-    # Mevaseret Tsion - חרמון 2
-    "970000000000011190": "טויפלייבה אולה · Mevaseret", "000881070937000613000000000000": "Dr טויטו סברין (gyné) · Ramot",
+    "000881070937000613000000000000": "Dr טויטו סברין (gyné) · Ramot",
 }
-RECHERCHES = [(110, "שיננית רמות"), (110, "שיננית מעלה אדומים"), (110, "שיננית מבשרת"), (100, "טויטו")]
+RECHERCHES = [(100, "טויטו")]
 URL_RECHERCHE = "https://www.meuhedet.co.il/search?rn=1065&mod={}&q="
 ETAT = Path(__file__).resolve().parent / "etat.json"
 JOURS = ["lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"]
